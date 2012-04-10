@@ -1,0 +1,17 @@
+*.pyc
+*.swp
+vendor
+.ksl-venv
+.venv
+.tox
+keystone.egg-info/
+*.log
+.coverage
+covhtml
+pep8.txt
+nosetests.xml
+*.db
+doc/build
+.DS_Store
+doc/source/modules.rst
+doc/source/keystone.*

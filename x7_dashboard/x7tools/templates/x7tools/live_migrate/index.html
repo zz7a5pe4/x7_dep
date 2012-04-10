@@ -1,0 +1,300 @@
+{% extends 'x7tools/base.html' %}
+{% load i18n sizeformat %}
+{% block title %}X7 Tools{% endblock %}
+
+{% block page_header %}
+<script type="text/javascript" src="/static/js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.selectBox.js"></script>
+<script type="text/javascript" src="/static/js/jquery.timers.js"></script>
+
+<link rel="stylesheet" type="text/css"    href="/static/css/tabs.css"/>
+<link rel="stylesheet" type="text/css"    href="/static/css/tabs-panes.css"/>
+<link rel="stylesheet" type="text/css"    href="/static/css/jquery.selectBox.css"/>
+
+
+  {% include "horizon/common/_page_header.html" with title=_("Living Migrate") %}
+
+{% endblock page_header %}
+
+{% block js %}
+
+{% endblock %}
+    
+{% block main %}
+
+
+<style>
+  div.panes div {
+  background:#fff url(/media/img/gradient/h300.png) repeat-x 0 5px; 
+  -background:#fff;
+  height:450px;
+  }
+
+  div.panes label {
+  margin-bottom:15px;
+  display:block;
+  }
+
+  label.error {
+  color:red;
+  }
+</style>
+
+
+<script type="text/javascript">
+   var gX7Data = [];
+  
+   function submit_migrate(){
+	   //check 
+	   
+	   //submit
+       $("#migrateForm").submit();
+	  
+   }
+   
+  
+   
+   function getX7Data(){
+		jQuery.ajax({
+			url:'/tools/migrate/get_x7data',
+			type:'get',
+			dataType:'text',
+			success:function(retData, status) {
+				//alert( retData );
+			    gX7Data = eval(retData); 		
+			    initSelectBox();
+			},
+			error:function(XMLHttpRequest,textStatus) {                
+			    //alert('call ajax error');
+			}
+		});
+   }
+   
+   function initSelectBox(){
+	   //fromComputesSelect,targetComputesSelect
+	   var adict= {}
+	   for( i =0; i<gX7Data.length; i++ ){
+		   host = gX7Data[i];
+		   val = host['host'];
+		   desc = "host:" + host['host'] + "    zone:" + host['zone'];
+		   adict[ val ] = desc;	 
+	   }	    
+	   $("#fromComputesSelect").selectBox('options', adict );
+	   $("#targetComputesSelect").selectBox('options', adict );
+	   
+	   //vmselect
+	   adict= {}
+	   for( i =0; i<gX7Data.length; i++ ){
+		   host = gX7Data[i];
+		   vms = host['instances'];
+		   vms_dict = {}
+		   for( y=0; y<vms.length; y++ ){
+			   vm = vms[y];
+			   val = vm['instance'];
+			   desc = vm['instance'] + "  state:" + vm['state'];
+			   vms_dict[ val ] = desc;	 
+		   }
+		   
+		   val = "host:" + host['host'] ;
+		   adict[ val ] = vms_dict;	 
+	   }	
+	   $("#vmSelect").selectBox('options', adict );
+	   
+   }
+   
+   function findHost( vm_instance ){
+	   //查找host
+	   var host = null;
+	   for( i =0; i<gX7Data.length; i++ ){
+		   host = gX7Data[i];
+		   vms = host['instances'];
+		   for( y=0; y<vms.length; y++ ){
+			   vm = vms[y];
+			   val = vm['instance'];
+			   if( val == vm_instance )
+				   return host;
+		   }
+	   }	
+	   return null;   
+   }
+   
+   
+   function showHostVms(){
+	   var hostName = $("#fromComputesSelect").val();   
+	   //查找host
+	   var host = null;
+	   for( i =0; i<gX7Data.length; i++ ){
+		   host = gX7Data[i];
+		   val = host['host'];
+		   if( val == hostName ){
+			   break;
+		   }
+	   }	
+	   
+	   adict= {};
+	   if( host != null ){
+		   host = gX7Data[i];
+		   vms = host['instances'];
+		   vms_dict = {}
+		   for( y=0; y<vms.length; y++ ){
+			   vm = vms[y];
+			   val = vm['instance'];
+			   desc = vm['instance'] + "  state:" + vm['state'];
+			   vms_dict[ val ] = desc;	 
+		   }
+		   
+		   val = "host:" + host['host'] ;
+		   adict[ val ] = vms_dict;	 
+	   }
+	   
+	   $("#vmSelect").selectBox('options', adict );
+	   
+   }
+</script>
+<div id="wizard_tabs">
+	  <!-- tabs -->
+	  <ul class="tabs">
+	    <li><a href="#" class="l">Prepare</a></li>
+	    <li><a href="#" class="l">Migrate</a></li>
+	  </ul>
+	
+	  <!-- panes -->
+	  <div class="panes">
+	    <div>
+	       <table border="0px">
+	        <tr>
+	          <td>
+			    	<label for="fromComputesSelect">Select Migrate From Compute Host: <br />			    		
+				       <select id="fromComputesSelect" name="fromComputesSelect" size="8" style="width: 400px;">
+				       </select>
+				    </label>
+              </td>
+              <td>
+		    		<label >Select VM For Migrate: <br />
+			    	    <select id="vmSelect" name="vmSelect" size="8" style="width: 400px;"></select>
+			    	</label>
+  		     </td>
+  		     </tr>
+			   <tr>
+			     <td>
+			    		<label for="targetComputesSelect">Select Migrate To Compute Host: <br />
+				    	  <select id="targetComputesSelect" name="targetComputesSelect" size="8" style="width: 400px;">
+				    	  </select>
+				    	</label>
+			     </td>
+			     <td>
+			         &nbsp;
+			     </td>
+			   </tr>
+		    </table>
+				     	
+	        <p><button class="next">Next &raquo;</button>  </p>
+	    </div>	    
+	
+	    <div >
+	        <span width="350px">
+	        <form id="migrateForm" name="migrateForm" action="/tools/migrate/submit_migrate" method="post">	        
+	            <br />
+	            <p>
+				    <label for="instance">目标VM:<input id="instance" name="instance" /></label>
+				</p>
+				<p>
+				    <label for="host">目标HOST:<input id="host" name="host" /></label>
+				</p>
+	       
+	            <p id="migrate_status" style="display:none">
+				    <label for="mstatus_label">迁移状态:<input id="mstatus_label" name="host_label" /> </label>
+				</p>
+				
+			    <p>你确定要把虚拟迁移吗？</p>			
+		        <p>
+			        <button class="prev" >&laquo; Prev</button>  &nbsp;&nbsp;&nbsp; 
+			        <button id="migrateButton" type="button" onclick="javascript:submit_migrate();">Submit</button>
+		        </p>
+	        </span>
+	        </form>
+	    </div>
+	  </div>
+	</div>
+	<!-- activate tabs with JavaScript -->
+	<script>
+	    $(function() {	
+	         // get container for the wizard and initialize its exposing
+	         var wizard = $("#wizard_tabs"); //.expose({color: '#789', lazy: true});
+	
+	         // enable tabs that are contained within the wizard
+	        $("ul.tabs", wizard).tabs("div.panes > div", function(event, index) {			   
+	        	var vmSelect = $("#vmSelect");
+	        	var hostSelect = $("#targetComputesSelect");
+		        if (index > 0 ){		        	
+		        	if( $("#vmSelect").val() == null || $("#vmSelect").val() == "") {
+		        	    vmSelect.parent().addClass("error");	
+		                return false;
+		        	}		        	
+		        	
+		        	if( $("#targetComputesSelect").val() == null || $("#targetComputesSelect").val() == "") {
+		        		hostSelect.parent().addClass("error");	
+		                return false;
+		        	}
+		        	
+		        	//判断目标host和当前的host相同
+		        	host = findHost( $("#vmSelect").val() );
+		        	if( host != null ){
+		        		hostname = host['host'];
+		        		if( hostname == $("#targetComputesSelect").val() ){
+		        			hostSelect.parent().addClass("error");
+		        			alert( '迁移需要选择不同的目标host节点, 请重新选择');
+			                return false;
+		        		}
+		        	}
+		        }	
+	            // everything is ok. remove possible red highlight from the terms
+	            vmSelect.parent().removeClass("error");
+	            hostSelect.parent().removeClass("error");	
+	        });
+	  
+	        // get handle to the tabs API
+	        var api = $("ul.tabs", wizard).data("tabs");
+	
+	        // "next tab" button
+	        $("button.next", wizard).click(function() {
+	            api.next();
+	        });
+	
+	        // "previous tab" button
+	        $("button.prev", wizard).click(function() {
+	            api.prev();
+	            return false;
+	        });
+	        
+	        
+	        $("#fromComputesSelect").selectBox();
+	        $("#vmSelect").selectBox();
+	        $("targetComputesSelect").selectBox();
+	        
+	        $('#fromComputesSelect').selectBox().change(function(){
+	        	showHostVms();
+	        });
+	        
+	        //更新迁移确认panel
+	        $('#vmSelect').selectBox().change(function(){
+	        	$('#instance').val( $('#vmSelect').val() );
+	        	$('#host').val( $('#targetComputesSelect').val() );	        	
+	        });
+	        
+	        $('#targetComputesSelect').selectBox().change(function(){
+	        	$('#instance').val( $('#vmSelect').val() );
+	        	$('#host').val( $('#targetComputesSelect').val() );
+	        });
+	        
+	        //开始获取数据,并更新selectbox
+	        getX7Data();        
+	        
+	    });    
+    	
+
+	</script>
+
+ 
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'x7tools/base.html' %}
+{% load i18n sizeformat %}
+{% block title %}X7 Tools{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Host Setup") %}
+{% endblock page_header %}
+
+{% block js %}
+{% endblock %}
+
+{% block main %}
+ 
+<script type="text/javascript" src="/static/js/jquery-1.7.min.js"></script>
+<script type="text/javascript">
+    var rowCnt = 0;
+    
+    function submit_setup(){
+    	sel = 0;
+    	for( i=0; i<rowCnt; i++ ){
+    		if($("#check"+i).attr("checked")=="checked"){
+    		    sel = sel + 1;
+    		}
+    	}
+    	if( sel < 1 ){
+    		alert("please select one or more host for automation setup!");
+    		return false;
+    	}
+    	$("#hostsetupForm").submit();
+    }
+    
+    function init_rows(){
+    	jQuery.ajax({
+			url:'/tools/get_hostlist',
+			type:'get',
+			dataType:'text',
+			success:function(retData, status) {
+				hostList = eval( retData );
+				rowCnt = hostList.length;   
+				for( i=0; i<hostList.length; i++){
+		    		r = hostList[i];
+		    		
+		    		$("#span_desc"+i).text( r.desc );
+		    		$("#span_hostname"+i).text( r.hostname );
+		    		$("#span_status"+i).text( r.status );
+		    		
+		    		$("#desc"+i).val( r.desc );
+		    		$("#hostname"+i).val( r.hostname );
+		    	}
+				
+			},
+			error:function(XMLHttpRequest,textStatus) {                
+			    //alert('call ajax error');
+			}
+		});    	
+    }
+</script>
+  <div>
+    <form id="hostsetupForm" name="hostsetupForm" action="/tools/submit_setup" method="post">	   
+    {% csrf_token %}
+        <input type="hidden" name="hostname0" id="hostname0" /> 
+        <input type="hidden" name="hostname1" id="hostname1" />
+        <input type="hidden" name="hostname2" id="hostname2" />
+        <input type="hidden" name="hostname3" id="hostname3" />
+        <input type="hidden" name="hostname4" id="hostname4" />
+        <input type="hidden" name="hostname5" id="hostname5" />
+        
+        <input type="hidden" name="desc0" id="desc0" /> 
+        <input type="hidden" name="desc1" id="desc1" />
+        <input type="hidden" name="desc2" id="desc2" />
+        <input type="hidden" name="desc3" id="desc3" />
+        <input type="hidden" name="desc4" id="desc4" />
+        <input type="hidden" name="desc5" id="desc5" />
+        
+    <p>Host列表:</p>
+    <table border="1px" width="600px">
+       <tr >
+	    <th width="20px" align="center"></th>
+	    <th width="150px" align="center">描述</th>
+	    <th width="80px" align="center">Host</th>
+	    <th width="80px" align="center">状态</th>
+	    <th width="150px" align="center">安装进度</th>
+	   </tr>
+	   <tr id="row0"  nowrap>
+	      <td align="center"><input type="checkbox" id="check0" name="check0" /></td>
+          <td><span id="span_desc0" ></span></td>
+          <td><span id="span_hostname0" ></span></td>
+          <td><span id="span_status0" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+       <tr id="row1"  nowrap>
+	      <td align="center"><input type="checkbox" id="check1" name="check1" /></td>
+          <td><span id="span_desc1" ></span></td>
+          <td><span id="span_hostname1" ></span></td>
+          <td><span id="span_status1" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+       <tr id="row2"  nowrap>
+	      <td align="center"><input type="checkbox" id="check2" name="check2" /></td>
+          <td><span id="span_desc2" ></span></td>
+          <td><span id="span_hostname2" ></span></td>
+          <td><span id="span_status2" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+       <tr id="row3"  nowrap>
+	      <td align="center"><input type="checkbox" id="check3" name="check3" /></td>
+          <td><span id="span_desc3" ></span></td>
+          <td><span id="span_hostname3" ></span></td>
+          <td><span id="span_status3" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+       <tr id="row4"  nowrap>
+	      <td align="center"><input type="checkbox" id="check4" name="check4" /></td>
+          <td><span id="span_desc4" ></span></td>
+          <td><span id="span_hostname4" ></span></td>
+          <td><span id="span_status4" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+       <tr id="row5"  nowrap>
+	      <td align="center"><input type="checkbox" id="check5" name="check5" /></td>
+          <td><span id="span_desc5" ></span></td>
+          <td><span id="span_hostname5" ></span></td>
+          <td><span id="span_status5" ></span></td>
+          <td>&nbsp;</td>
+       </tr>
+    </table>
+    <br />
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button"  style="height:30px"" value=" Begin Automation Setup " onclick="javascript:submit_setup();" /></span>
+    
+    </form>
+    </div>
+    
+	<script type="text/javascript">
+	    
+		$(document).ready(function() {
+			init_rows();
+		});
+	</script>
+
+{% endblock %}

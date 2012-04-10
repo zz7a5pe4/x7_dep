@@ -1,0 +1,11 @@
+This is a simple Django-based interface for vms_manage.
+
+To enable it in dashboard, install the x7_dashboard package and turn it 
+on in openstack-dashboard/setting.py
+- add 'x7tools' to INSTALLED_APPS tuple;
+and
+in local/local_settings.py:
+- add 'X7Tools' to 'dashboards' key in HORIZON_CONFIG.
+   e.x.:  'dashboards': ('nova', 'syspanel', 'settings','tools',),
+   
+
