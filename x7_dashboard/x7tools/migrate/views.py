@@ -108,7 +108,7 @@ def query_migrate(request):
         pkg['desc'] = desc        
   
     json = simplejson.dumps( pkg )
-    print json
+    #print json
 
     return shortcuts.render(request, 'x7tools/ajax.html', {"json":json}, content_type="text/html")
     
