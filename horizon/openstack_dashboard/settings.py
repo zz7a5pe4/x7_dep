@@ -64,8 +64,6 @@ MIDDLEWARE_CLASSES = (
     'horizon.middleware.HorizonMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
-    'django.middleware.cache.CacheMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -101,7 +99,6 @@ INSTALLED_APPS = (
     'horizon.dashboards.nova',
     'horizon.dashboards.syspanel',
     'horizon.dashboards.settings',
-    'x7tools',
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -132,9 +129,6 @@ TOTAL_CLOUD_RAM_GB = 10
 
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = 'Member'
 LIVE_SERVER_PORT = 8000
-
-CACHE_BACKEND = 'db://x7_cache_table?timeout=3000&max_entries=400'
-
 
 try:
     from local.local_settings import *
