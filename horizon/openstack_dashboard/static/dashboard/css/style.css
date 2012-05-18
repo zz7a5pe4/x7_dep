@@ -69,17 +69,6 @@ dt {
 .topbar .switcher_bar ul {
   width: 130px;
 }
-
-#user_info {
-    color: #888;
-    margin: auto 0;
-}
-
-#user_info > a {
-    margin-left: 25px;
-    font-size: 11px !important;
-}
-
 .page-header {
   margin: 0;
   padding: 0;
@@ -96,6 +85,43 @@ h2 {
 body {
   background-color: #fff;
   min-width: 890px;
+}
+
+#header {
+	height: 80px;
+	position:relative;
+}
+
+h1.brand {
+    width: 100%;
+    margin: 0;
+    !background-color: #f5f5f5;
+    padding-bottom: 40px;
+    background-color: blue;
+}
+
+h1.brand a {
+    background: url(../img/logo_192.png) top left no-repeat;
+    display: block;
+    float: left;
+    width: 192px;
+    height: 79px;
+    text-indent: -9999px;
+    margin-left: 10px;
+    !margin-top: 15px;
+    !margin-bottom: 25px;
+}
+#user_info {
+    color: #fff;
+    margin: auto 0;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+}
+#user_info > a {
+    margin-left: 25px;
+    font-size: 11px !important;
+    color: #fff;
 }
 
 /* Login Splash Page */
@@ -168,27 +194,6 @@ body {
 .sidebar .nav-tabs li.active a {
     background-color: #edf9ff;
 }
-
-h1.brand {
-    width: 100%;
-    margin: 0;
-    background-color: #f5f5f5;
-    padding-bottom: 40px;
-}
-
-h1.brand a {
-    background: url(../img/logo.png) top left no-repeat;
-    display: block;
-    float: left;
-    width: 116px;
-    height: 123px;
-    text-indent: -9999px;
-    margin-left: 56px;
-    margin-top: 15px;
-    margin-bottom: 25px;
-}
-
-
 /* Tenant Dropdown */
 
 

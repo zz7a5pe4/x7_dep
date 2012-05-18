@@ -9,20 +9,25 @@
     {% endblock %}
   </head>
   <body id="{% block body_id %}{% endblock %}">
+  	<div id="header">
+  		<h1 class="brand clearfix"><a href="{% url horizon:user_home %}">{% trans "X7Cloud Dashboard" %}</a></h1>
+  		{% include "_header.html" %}
+  	</div>
+  	
     {% block content %}
-      <div id="container">
-        {% block sidebar %}{% endblock %}
-        <div id='main_content'>
-          <div class='topbar'>
-          {% include "_header.html" %}
-          {% block page_header %}{% endblock %}
-          </div>
-          {% block main %}{% endblock %}
-        </div>
-      </div>
+    <div id="container">
+    	{% block sidebar %}{% endblock %}
+    	<div id='main_content'>
+    		<div class='topbar'>
+    			{% block page_header %}{% endblock %}
+    		</div>
+    		{% block main %}{% endblock %}
+    	</div>
+    </div>
     {% endblock %}
+    
     <div id="footer">
-      {% block footer %}{% endblock %}
+    	{% block footer %}{% endblock %}
     </div>
     {% block js %}
       {% include "_scripts.html" %}

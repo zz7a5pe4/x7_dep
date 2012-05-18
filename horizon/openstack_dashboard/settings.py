@@ -31,8 +31,8 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 1
-SITE_BRANDING = 'OpenStack'
-SITE_NAME = 'openstack'
+SITE_BRANDING = 'X7Cloud'
+SITE_NAME = 'x7cloud'
 ENABLE_VNC = True
 
 LOGIN_URL = '/auth/login'
