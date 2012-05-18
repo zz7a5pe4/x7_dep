@@ -40,7 +40,7 @@ dt {
 }
 
 .topbar {
-  background: #f2f2f2;
+  background: #6ed2ef;
   border-bottom: 1px solid #e5e5e5;
   padding: 10px 25px;
   margin-top: 0;
@@ -88,28 +88,26 @@ body {
 }
 
 #header {
-	height: 80px;
+	height: 75px;
+	width: 100%;
 	position:relative;
 }
 
 h1.brand {
     width: 100%;
     margin: 0;
-    !background-color: #f5f5f5;
-    padding-bottom: 40px;
-    background-color: blue;
+    background-color: #2b78e4;
+    padding-bottom: 5px;
 }
 
 h1.brand a {
-    background: url(../img/logo_192.png) top left no-repeat;
+    background: url(../img/logo_170.png) top left no-repeat;
     display: block;
     float: left;
-    width: 192px;
-    height: 79px;
+    width: 170px;
+    height: 70px;
     text-indent: -9999px;
     margin-left: 10px;
-    !margin-top: 15px;
-    !margin-bottom: 25px;
 }
 #user_info {
     color: #fff;
