@@ -124,35 +124,22 @@ class DetailView(tabs.TabView):
         return self.tab_group_class(request, instance=instance, **kwargs)
 
 # chunlai
-class LiveMigrationView(tabs.TabView):
-    tab_group_class = InstanceDetailTabs
-    template_name = 'nova/instances_and_volumes/instances/detail.html'
+class CreateView(forms.ModalFormView):
+    form_class = CreateSnapshot
+    template_name = 'nova/images_and_snapshots/snapshots/create.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(DetailView, self).get_context_data(**kwargs)
-        context["instance"] = self.get_data()
-        return context
-
-    def get_data(self):
-        if not hasattr(self, "_instance"):
-            try:
-                instance_id = self.kwargs['instance_id']
-                instance = api.server_get(self.request, instance_id)
-                instance.volumes = api.volume_instance_list(self.request,
-                                                            instance_id)
-                instance.full_flavor = api.flavor_get(self.request,
-                                                      instance.flavor["id"])
-                instance.security_groups = api.server_security_groups(
-                                           self.request, instance_id)
-            except:
-                redirect = reverse('horizon:nova:instances_and_volumes:index')
-                exceptions.handle(self.request,
-                                  _('Unable to retrieve details for '
-                                    'instance "%s".') % instance_id,
-                                    redirect=redirect)
-            self._instance = instance
-        return self._instance
-
-    def get_tabs(self, request, *args, **kwargs):
-        instance = self.get_data()
-        return self.tab_group_class(request, instance=instance, **kwargs)
+    def get_initial(self):
+        redirect = reverse('horizon:nova:instances_and_volumes:index')
+        instance_id = self.kwargs["instance_id"]
+        try:
+            self.instance = api.server_get(self.request, instance_id)
+        except:
+            self.instance = None
+            msg = _("Unable to retrieve instance.")
+            exceptions.handle(self.request, msg, redirect)
+        if self.instance.status != api.nova.INSTANCE_ACTIVE_STATE:
+            msg = _('To create a snapshot, the instance must be in '
+                    'the "%s" state.') % api.nova.INSTANCE_ACTIVE_STATE
+            raise exceptions.Http302(redirect, message=msg)
+        return {"instance_id": instance_id,
+                "tenant_id": self.request.user.tenant_id}
