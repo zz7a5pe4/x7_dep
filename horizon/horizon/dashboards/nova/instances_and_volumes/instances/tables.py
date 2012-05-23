@@ -281,5 +281,5 @@ class InstancesTable(tables.DataTable):
         table_actions = (LaunchLink, TerminateInstance)
         row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
                        TogglePause, ToggleSuspend, RebootInstance,
-                       MigrateInstance,                         # chunlai
+                       MigrateInstance,  LiveMigration,                      # chunlai
                        TerminateInstance)
