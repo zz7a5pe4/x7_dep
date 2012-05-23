@@ -175,7 +175,7 @@ class LiveMigration(tables.LinkAction):
     name = "live_migration"
     verbose_name = _("Live Migration")
     url = "horizon:nova:images_and_snapshots:snapshots:live_migration"
-    classes = ("ajax-modal", "btn-camera")
+    classes = ("ajax-modal", "btn-live_migrate")
 
     def allowed(self, request, instance=None):
         return instance.status in ACTIVE_STATES
