@@ -76,6 +76,20 @@ class RebootInstance(tables.BatchAction):
     def action(self, request, obj_id):
         api.server_reboot(request, obj_id)
 
+# chunlai
+class MigrateInstance(tables.BatchAction):
+    name = "migrate"
+    action_present = _("Migrate")
+    action_past = _("Migrated")
+    data_type_singular = _("Instance")
+    data_type_plural = _("Instances")
+    classes = ('btn-danger', 'btn-migrate')
+    
+    def allowed(self, request, instance=None):
+        return instance.status in ACTIVE_STATES or instance.status == 'SHUTOFF'
+
+    def action(self, request, obj_id):
+        api.server_migrate(request, obj_id)
 
 class TogglePause(tables.BatchAction):
     name = "pause"
@@ -156,6 +170,15 @@ class SnapshotLink(tables.LinkAction):
     def allowed(self, request, instance=None):
         return instance.status in ACTIVE_STATES
 
+# chunlai
+class LiveMigration(tables.LinkAction):
+    name = "live_migration"
+    verbose_name = _("Live Migration")
+    url = "horizon:nova:images_and_snapshots:snapshots:live_migration"
+    classes = ("ajax-modal", "btn-camera")
+
+    def allowed(self, request, instance=None):
+        return instance.status in ACTIVE_STATES
 
 class ConsoleLink(tables.LinkAction):
     name = "console"
@@ -258,4 +281,5 @@ class InstancesTable(tables.DataTable):
         table_actions = (LaunchLink, TerminateInstance)
         row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
                        TogglePause, ToggleSuspend, RebootInstance,
+                       MigrateInstance,                         # chunlai
                        TerminateInstance)
