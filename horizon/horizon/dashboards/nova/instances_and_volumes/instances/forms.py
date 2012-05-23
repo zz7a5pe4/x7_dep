@@ -21,6 +21,7 @@
 import logging
 
 from django import shortcuts
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
@@ -32,19 +33,25 @@ from horizon import forms
 LOG = logging.getLogger(__name__)
 
 
-class UpdateInstance(forms.SelfHandlingForm):
+class LiveMigration(forms.SelfHandlingForm):
     tenant_id = forms.CharField(widget=forms.HiddenInput())
-    instance = forms.CharField(widget=forms.TextInput(
-                               attrs={'readonly': 'readonly'}))
-    name = forms.CharField(required=True)
+    instance_id = forms.CharField(label=_("Instance ID"),
+                                  widget=forms.TextInput(
+                                        attrs={'readonly': 'readonly'}))
+    name = forms.CharField(max_length="20", label=_("Snapshot Name"))
 
     def handle(self, request, data):
         try:
-            api.server_update(request, data['instance'], data['name'])
-            messages.success(request,
-                             _('Instance "%s" updated.') % data['name'])
+            api.snapshot_create(request, data['instance_id'], data['name'])
+            # NOTE(gabriel): This API call is only to display a pretty name.
+            instance = api.server_get(request, data['instance_id'])
+            vals = {"name": data['name'], "inst": instance.name}
+            messages.success(request, _('Snapshot "%(name)s" created for '
+                                        'instance "%(inst)s"') % vals)
+            return shortcuts.redirect('horizon:nova:images_and_snapshots:'
+                                      'index')
         except:
-            exceptions.handle(request, _('Unable to update instance.'))
-
-        return shortcuts.redirect(
-                        'horizon:nova:instances_and_volumes:index')
+            redirect = reverse("horizon:nova:instances_and_volumes:index")
+            exceptions.handle(request,
+                              _('Unable to create snapshot.'),
+                              redirect=redirect)

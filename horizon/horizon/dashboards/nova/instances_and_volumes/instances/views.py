@@ -34,6 +34,7 @@ from horizon import exceptions
 from horizon import forms
 from horizon import tabs
 from .forms import UpdateInstance
+from .froms import LiveMigration
 from .tabs import InstanceDetailTabs
 
 
@@ -124,8 +125,8 @@ class DetailView(tabs.TabView):
         return self.tab_group_class(request, instance=instance, **kwargs)
 
 # chunlai
-class CreateView(forms.ModalFormView):
-    form_class = CreateSnapshot
+class LiveMigrationView(forms.ModalFormView):
+    form_class = LiveMigration
     template_name = 'nova/images_and_snapshots/snapshots/create.html'
 
     def get_initial(self):
