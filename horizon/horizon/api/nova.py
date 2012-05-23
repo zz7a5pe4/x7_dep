@@ -358,6 +358,7 @@ def server_reboot(request, instance_id, hardness=REBOOT_HARD):
     server = server_get(request, instance_id)
     server.reboot(hardness)
 
+# chunlai 
 def server_migrate(request, instance_id ):
      novaclient(request).servers.migrate(instance_id)
      
