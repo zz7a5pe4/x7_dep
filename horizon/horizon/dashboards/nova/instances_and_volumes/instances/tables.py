@@ -174,7 +174,7 @@ class SnapshotLink(tables.LinkAction):
 class LiveMigration(tables.LinkAction):
     name = "live_migration"
     verbose_name = _("Live Migration")
-    url = "horizon:nova:images_and_snapshots:snapshots:live_migration"
+    url = "horizon:nova:instances_and_volumes:instances:live_migration"
     classes = ("ajax-modal", "btn-live_migrate")
 
     def allowed(self, request, instance=None):
