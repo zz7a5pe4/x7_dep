@@ -88,6 +88,6 @@ class SyspanelInstancesTable(tables.DataTable):
         table_actions = (TerminateInstance,)
         row_class = AdminUpdateRow
         row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
+                       LiveMigration, MigrateInstance,
                        TogglePause, ToggleSuspend, RebootInstance,
-                       TerminateInstance,
-                       MigrateInstance,LiveMigration)  # chunlai
+                       TerminateInstance)  # chunlai

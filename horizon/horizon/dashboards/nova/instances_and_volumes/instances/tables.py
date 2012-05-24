@@ -83,7 +83,7 @@ class MigrateInstance(tables.BatchAction):
     action_past = _("Migrated")
     data_type_singular = _("Instance")
     data_type_plural = _("Instances")
-    classes = ('btn-danger', 'btn-migrate')
+    classes = ('btn-migrate')
     
     def allowed(self, request, instance=None):
         return instance.status in ACTIVE_STATES or instance.status == 'SHUTOFF'
