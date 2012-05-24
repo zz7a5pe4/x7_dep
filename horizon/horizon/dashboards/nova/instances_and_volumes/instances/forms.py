@@ -62,7 +62,8 @@ class LiveMigration(forms.SelfHandlingForm):
     def handle(self, request, data):
         print "==chunlai: forms.py#LiveMigration         3"
         try:
-            pass
+            print "==chunlai: forms.py#LiveMigration         4"
+            
 #            api.snapshot_create(request, data['instance_id'], data['name'])
 #            # NOTE(gabriel): This API call is only to display a pretty name.
 #            instance = api.server_get(request, data['instance_id'])
@@ -72,9 +73,9 @@ class LiveMigration(forms.SelfHandlingForm):
 #            return shortcuts.redirect('horizon:nova:images_and_snapshots:'
 #                                      'index')
         except:
-            pass
-#            redirect = reverse("horizon:nova:instances_and_volumes:index")
-#            exceptions.handle(request,
-#                              _('Unable to live migrate.'),
-#                              redirect=redirect)
+            print "==chunlai: forms.py#LiveMigration         5"
+            redirect = reverse("horizon:nova:instances_and_volumes:index")
+            exceptions.handle(request,
+                              _('Unable to live migrate.'),
+                              redirect=redirect)
         return None

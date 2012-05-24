@@ -137,8 +137,11 @@ class LiveMigrationView(forms.ModalFormView):
         redirect = reverse('horizon:nova:instances_and_volumes:index')
         instance_id = self.kwargs["instance_id"]
         try:
+            print "==chunlai: views.py#LiveMigrationView        4"
             self.instance = api.server_get(self.request, instance_id)
         except:
+            print "==chunlai: views.py#LiveMigrationView        5"
+
             self.instance = None
             msg = _("Unable to retrieve instance.")
             exceptions.handle(self.request, msg, redirect)
