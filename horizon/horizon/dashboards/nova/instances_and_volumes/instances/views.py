@@ -127,20 +127,21 @@ class DetailView(tabs.TabView):
 # chunlai
 class LiveMigrationView(forms.ModalFormView):
     form_class = LiveMigration
-    template_name = 'nova/images_and_snapshots/snapshots/create.html'
+    template_name = 'nova/instances_and_volumes/instances/live_migrate.html'
 
     def get_initial(self):
-        redirect = reverse('horizon:nova:instances_and_volumes:index')
-        instance_id = self.kwargs["instance_id"]
-        try:
-            self.instance = api.server_get(self.request, instance_id)
-        except:
-            self.instance = None
-            msg = _("Unable to retrieve instance.")
-            exceptions.handle(self.request, msg, redirect)
-        if self.instance.status != api.nova.INSTANCE_ACTIVE_STATE:
-            msg = _('To create a snapshot, the instance must be in '
-                    'the "%s" state.') % api.nova.INSTANCE_ACTIVE_STATE
-            raise exceptions.Http302(redirect, message=msg)
-        return {"instance_id": instance_id,
-                "tenant_id": self.request.user.tenant_id}
+#        redirect = reverse('horizon:nova:instances_and_volumes:index')
+#        instance_id = self.kwargs["instance_id"]
+#        try:
+#            self.instance = api.server_get(self.request, instance_id)
+#        except:
+#            self.instance = None
+#            msg = _("Unable to retrieve instance.")
+#            exceptions.handle(self.request, msg, redirect)
+#        if self.instance.status != api.nova.INSTANCE_ACTIVE_STATE:
+#            msg = _('To create a snapshot, the instance must be in '
+#                    'the "%s" state.') % api.nova.INSTANCE_ACTIVE_STATE
+#            raise exceptions.Http302(redirect, message=msg)
+#        return {"instance_id": instance_id,
+#                "tenant_id": self.request.user.tenant_id}
+        return None  
