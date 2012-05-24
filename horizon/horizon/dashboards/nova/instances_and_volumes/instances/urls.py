@@ -25,7 +25,6 @@ from .views import UpdateView, DetailView, LiveMigrationView
 
 INSTANCES = r'^(?P<instance_id>[^/]+)/%s$'
 
-
 urlpatterns = patterns(
     'horizon.dashboards.nova.instances_and_volumes.instances.views',
     url(INSTANCES % 'detail', DetailView.as_view(), name='detail'),
