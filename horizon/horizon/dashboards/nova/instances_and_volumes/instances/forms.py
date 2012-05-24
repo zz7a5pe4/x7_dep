@@ -52,7 +52,7 @@ class UpdateInstance(forms.SelfHandlingForm):
 class LiveMigration(forms.SelfHandlingForm):
     tenant_id = forms.CharField(widget=forms.HiddenInput())
     instance = forms.CharField(widget=forms.TextInput(
-                                label=_("add label here"),
+#                                label=_("add label here"),
                                attrs={'readonly': 'readonly'}))
     name = forms.CharField(required=True, max_length="20", label=_("label2 here"))
 
