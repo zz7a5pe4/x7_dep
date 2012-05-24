@@ -58,7 +58,6 @@ class LiveMigration(forms.SelfHandlingForm):
 
     def handle(self, request, data):
         try:
-            pass
             api.server_live_migration(request, data['instance'], data['host'])  #
             messages.success(request,
                              _('Instance migrated to host "%s".') % data['host'])
