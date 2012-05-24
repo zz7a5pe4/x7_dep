@@ -365,9 +365,10 @@ def server_migrate(request, instance_id ):
 def server_update(request, instance_id, name):
     return novaclient(request).servers.update(instance_id, name=name)
 # x7
-def server_live_migration(request, instance_id, host):
+def server_live_migrate(request, instance_id, host):
     print "##chunlai======== api/nova.py# server_live_migration"
-    return novaclient(request).servers.live_migrate(instance_id, host=host)
+    return novaclient(request).servers.live_migrate(instance_id, host=host, block_migration=False, 
+                     disk_over_commit=False)
 
 
 def server_add_floating_ip(request, server, floating_ip):
