@@ -33,7 +33,8 @@ from horizon import api
 from horizon import exceptions
 from horizon import forms
 from horizon import tabs
-from .froms import LiveMigration
+from .forms import UpdateInstance
+from .forms import LiveMigration
 from .tabs import InstanceDetailTabs
 
 
@@ -129,17 +130,18 @@ class LiveMigrationView(forms.ModalFormView):
     template_name = 'nova/instances_and_volumes/live_migration/migration.html'
 
     def get_initial(self):
-        redirect = reverse('horizon:nova:instances_and_volumes:index')
-        instance_id = self.kwargs["instance_id"]
-        try:
-            self.instance = api.server_get(self.request, instance_id)
-        except:
-            self.instance = None
-            msg = _("Unable to retrieve instance.")
-            exceptions.handle(self.request, msg, redirect)
-        if self.instance.status != api.nova.INSTANCE_ACTIVE_STATE:
-            msg = _('To create a snapshot, the instance must be in '
-                    'the "%s" state.') % api.nova.INSTANCE_ACTIVE_STATE
-            raise exceptions.Http302(redirect, message=msg)
-        return {"instance_id": instance_id,
-                "tenant_id": self.request.user.tenant_id}
+#        redirect = reverse('horizon:nova:instances_and_volumes:index')
+#        instance_id = self.kwargs["instance_id"]
+#        try:
+#            self.instance = api.server_get(self.request, instance_id)
+#        except:
+#            self.instance = None
+#            msg = _("Unable to retrieve instance.")
+#            exceptions.handle(self.request, msg, redirect)
+#        if self.instance.status != api.nova.INSTANCE_ACTIVE_STATE:
+#            msg = _('To create a snapshot, the instance must be in '
+#                    'the "%s" state.') % api.nova.INSTANCE_ACTIVE_STATE
+#            raise exceptions.Http302(redirect, message=msg)
+#        return {"instance_id": instance_id,
+#                "tenant_id": self.request.user.tenant_id}
+        return None  
