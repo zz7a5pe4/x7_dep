@@ -65,5 +65,5 @@ class LiveMigration(forms.SelfHandlingForm):
             exceptions.handle(request, _('Unable to live migrate.'))
 
         return shortcuts.redirect(
-                        'horizon:nova:instances_and_volumes:index')
+                        'horizon:syspanel:instances:index')
         
