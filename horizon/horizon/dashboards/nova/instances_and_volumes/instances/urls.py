@@ -37,6 +37,6 @@ urlpatterns = patterns(
 
 urlpatterns += patterns('',
     url(r'^(?P<instance_id>[^/]+)/live_migration',
-        CreateView.as_view(),
+        LiveMigrationView.as_view(),
         name='create')
 )
