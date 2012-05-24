@@ -49,21 +49,21 @@ class UpdateInstance(forms.SelfHandlingForm):
         return shortcuts.redirect(
                         'horizon:nova:instances_and_volumes:index')
 
+# x7
 class LiveMigration(forms.SelfHandlingForm):
     tenant_id = forms.CharField(widget=forms.HiddenInput())
     instance = forms.CharField(widget=forms.TextInput(
-#                                label=_("add label here"),
                                attrs={'readonly': 'readonly'}))
-    name = forms.CharField(required=True, max_length="20", label=_("label2 here"))
+    host = forms.CharField(required=True, max_length="30", label=_("To Host"))
 
     def handle(self, request, data):
         try:
             pass
-#            api.server_update(request, data['instance'], data['name'])
-#            messages.success(request,
-#                             _('Instance "%s" updated.') % data['name'])
+            api.server_live_migration(request, data['instance'], data['host'])  #
+            messages.success(request,
+                             _('Instance migrated to host "%s".') % data['host'])
         except:
-            exceptions.handle(request, _('Unable to update instance.'))
+            exceptions.handle(request, _('Unable to live migrate.'))
 
         return shortcuts.redirect(
                         'horizon:nova:instances_and_volumes:index')

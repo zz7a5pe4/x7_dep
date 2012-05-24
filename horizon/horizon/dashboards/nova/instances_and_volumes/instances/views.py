@@ -34,7 +34,7 @@ from horizon import exceptions
 from horizon import forms
 from horizon import tabs
 from .forms import UpdateInstance
-from .forms import LiveMigration
+from .forms import LiveMigration            # x7
 from .tabs import InstanceDetailTabs
 
 
@@ -124,7 +124,7 @@ class DetailView(tabs.TabView):
         instance = self.get_data()
         return self.tab_group_class(request, instance=instance, **kwargs)
 
-# chunlai
+# x7
 class LiveMigrationView(forms.ModalFormView):
     form_class = LiveMigration
     template_name = 'nova/instances_and_volumes/live_migration/migration.html'

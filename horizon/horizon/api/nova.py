@@ -358,12 +358,15 @@ def server_reboot(request, instance_id, hardness=REBOOT_HARD):
     server = server_get(request, instance_id)
     server.reboot(hardness)
 
-# chunlai 
+# x7 
 def server_migrate(request, instance_id ):
      novaclient(request).servers.migrate(instance_id)
-     
+
 def server_update(request, instance_id, name):
     return novaclient(request).servers.update(instance_id, name=name)
+# x7
+def server_live_migration(request, instance_id, host):
+    return novaclient(request).servers.live_migrate(instance_id, name=name)
 
 
 def server_add_floating_ip(request, server, floating_ip):
