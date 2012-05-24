@@ -50,24 +50,31 @@ class UpdateInstance(forms.SelfHandlingForm):
                         'horizon:nova:instances_and_volumes:index')
 
 class LiveMigration(forms.SelfHandlingForm):
+    print "==chunlai: forms.py#LiveMigration         1"
+    
     tenant_id = forms.CharField(widget=forms.HiddenInput())
     instance_id = forms.CharField(label=_("Instance ID"),
                                   widget=forms.TextInput(
                                         attrs={'readonly': 'readonly'}))
     name = forms.CharField(max_length="20", label=_("Destination Host"))
+    print "==chunlai: forms.py#LiveMigration         2"
 
     def handle(self, request, data):
+        print "==chunlai: forms.py#LiveMigration         3"
         try:
-            api.snapshot_create(request, data['instance_id'], data['name'])
-            # NOTE(gabriel): This API call is only to display a pretty name.
-            instance = api.server_get(request, data['instance_id'])
-            vals = {"name": data['name'], "inst": instance.name}
-            messages.success(request, _('Snapshot "%(name)s" created for '
-                                        'instance "%(inst)s"') % vals)
-            return shortcuts.redirect('horizon:nova:images_and_snapshots:'
-                                      'index')
+            pass
+#            api.snapshot_create(request, data['instance_id'], data['name'])
+#            # NOTE(gabriel): This API call is only to display a pretty name.
+#            instance = api.server_get(request, data['instance_id'])
+#            vals = {"name": data['name'], "inst": instance.name}
+#            messages.success(request, _('Snapshot "%(name)s" created for '
+#                                        'instance "%(inst)s"') % vals)
+#            return shortcuts.redirect('horizon:nova:images_and_snapshots:'
+#                                      'index')
         except:
-            redirect = reverse("horizon:nova:instances_and_volumes:index")
-            exceptions.handle(request,
-                              _('Unable to live migrate.'),
-                              redirect=redirect)
+            pass
+#            redirect = reverse("horizon:nova:instances_and_volumes:index")
+#            exceptions.handle(request,
+#                              _('Unable to live migrate.'),
+#                              redirect=redirect)
+        return None
