@@ -126,7 +126,7 @@ class DetailView(tabs.TabView):
 # chunlai
 class LiveMigrationView(forms.ModalFormView):
     form_class = LiveMigration
-    template_name = 'nova/images_and_snapshots/snapshots/create.html'
+    template_name = 'nova/instances_and_volumes/live_migration/migration.html'
 
     def get_initial(self):
         redirect = reverse('horizon:nova:instances_and_volumes:index')
