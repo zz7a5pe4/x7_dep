@@ -132,8 +132,6 @@ class LiveMigrationView(forms.ModalFormView):
     print "==chunlai: views.py#LiveMigrationView        2"
 
     def get_initial(self):
-        print "==chunlai: views.py#LiveMigrationView        3"
-
         redirect = reverse('horizon:nova:instances_and_volumes:index')
         instance_id = self.kwargs["instance_id"]
         try:
