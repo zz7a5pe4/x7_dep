@@ -32,13 +32,29 @@ from horizon import forms
 
 LOG = logging.getLogger(__name__)
 
+class UpdateInstance(forms.SelfHandlingForm):
+    tenant_id = forms.CharField(widget=forms.HiddenInput())
+    instance = forms.CharField(widget=forms.TextInput(
+                               attrs={'readonly': 'readonly'}))
+    name = forms.CharField(required=True)
+
+    def handle(self, request, data):
+        try:
+            api.server_update(request, data['instance'], data['name'])
+            messages.success(request,
+                             _('Instance "%s" updated.') % data['name'])
+        except:
+            exceptions.handle(request, _('Unable to update instance.'))
+
+        return shortcuts.redirect(
+                        'horizon:nova:instances_and_volumes:index')
 
 class LiveMigration(forms.SelfHandlingForm):
     tenant_id = forms.CharField(widget=forms.HiddenInput())
     instance_id = forms.CharField(label=_("Instance ID"),
                                   widget=forms.TextInput(
                                         attrs={'readonly': 'readonly'}))
-    name = forms.CharField(max_length="20", label=_("Snapshot Name"))
+    name = forms.CharField(max_length="20", label=_("Destination Host"))
 
     def handle(self, request, data):
         try:
@@ -53,5 +69,5 @@ class LiveMigration(forms.SelfHandlingForm):
         except:
             redirect = reverse("horizon:nova:instances_and_volumes:index")
             exceptions.handle(request,
-                              _('Unable to create snapshot.'),
+                              _('Unable to live migrate.'),
                               redirect=redirect)

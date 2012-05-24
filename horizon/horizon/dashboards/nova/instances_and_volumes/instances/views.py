@@ -33,7 +33,8 @@ from horizon import api
 from horizon import exceptions
 from horizon import forms
 from horizon import tabs
-from .froms import LiveMigration
+from .forms import UpdateInstance
+from .forms import LiveMigration
 from .tabs import InstanceDetailTabs
 
 
