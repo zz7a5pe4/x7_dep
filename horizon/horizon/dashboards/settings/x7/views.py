@@ -24,5 +24,5 @@ LOG = logging.getLogger(__name__)
 
 
 class IndexView(forms.ModalFormView):
-#    form_class = DownloadX509Credentials
+    form_class = DownloadX509Credentials
     template_name = 'settings/x7/index.html'
