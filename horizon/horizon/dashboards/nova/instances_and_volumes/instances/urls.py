@@ -20,15 +20,15 @@
 
 from django.conf.urls.defaults import patterns, url
 
-from .views import UpdateView, DetailView
+from .views import UpdateView, DetailView, LiveMigrationView
 
 
 INSTANCES = r'^(?P<instance_id>[^/]+)/%s$'
 
-
 urlpatterns = patterns(
     'horizon.dashboards.nova.instances_and_volumes.instances.views',
     url(INSTANCES % 'detail', DetailView.as_view(), name='detail'),
+    url(INSTANCES % 'live_migration', LiveMigrationView.as_view(), name='live_migration'),  # chunlai
     url(INSTANCES % 'console', 'console', name='console'),
     url(INSTANCES % 'vnc', 'vnc', name='vnc'),
     url(INSTANCES % 'update', UpdateView.as_view(), name='update'),

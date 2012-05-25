@@ -34,6 +34,7 @@ from horizon import exceptions
 from horizon import forms
 from horizon import tabs
 from .forms import UpdateInstance
+from .forms import LiveMigration            # x7
 from .tabs import InstanceDetailTabs
 
 
@@ -122,3 +123,26 @@ class DetailView(tabs.TabView):
     def get_tabs(self, request, *args, **kwargs):
         instance = self.get_data()
         return self.tab_group_class(request, instance=instance, **kwargs)
+
+# x7
+class LiveMigrationView(forms.ModalFormView):
+    form_class = LiveMigration
+    template_name = 'nova/instances_and_volumes/live_migration/migration.html'
+        
+    context_object_name = 'instance'
+
+    def get_object(self, *args, **kwargs):
+        if not hasattr(self, "object"):
+            instance_id = self.kwargs['instance_id']
+            try:
+                self.object = api.server_get(self.request, instance_id)
+            except:
+                redirect = reverse("horizon:nova:instances_and_volumes:index")
+                msg = _('Unable to retrieve instance details.')
+                exceptions.handle(self.request, msg, redirect=redirect)
+        return self.object
+
+    def get_initial(self):
+        return {'instance': self.kwargs['instance_id'],
+                'tenant_id': self.request.user.tenant_id,
+                'name': getattr(self.object, 'name', '')}

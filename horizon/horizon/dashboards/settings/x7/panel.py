@@ -1,7 +1,6 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
 # Copyright 2012 Openstack, LLC
-# Copyright 2012 Nebula, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -18,14 +17,12 @@
 from django.utils.translation import ugettext_lazy as _
 
 import horizon
+from horizon.dashboards.settings import dashboard
 
 
-class Settings(horizon.Dashboard):
-    name = _("Settings")
-    slug = "settings"
-    panels = ('user', 'project', 'ec2', 'x7')
-    default_panel = 'user'
-    nav = False
+class X7Panel(horizon.Panel):
+    name = _("X7 Authentication")
+    slug = 'x7'
 
 
-horizon.register(Settings)
+dashboard.Settings.register(X7Panel)

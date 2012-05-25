@@ -21,6 +21,7 @@
 import logging
 
 from django import shortcuts
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,7 +31,6 @@ from horizon import forms
 
 
 LOG = logging.getLogger(__name__)
-
 
 class UpdateInstance(forms.SelfHandlingForm):
     tenant_id = forms.CharField(widget=forms.HiddenInput())
@@ -48,3 +48,22 @@ class UpdateInstance(forms.SelfHandlingForm):
 
         return shortcuts.redirect(
                         'horizon:nova:instances_and_volumes:index')
+
+# x7
+class LiveMigration(forms.SelfHandlingForm):
+    tenant_id = forms.CharField(widget=forms.HiddenInput())
+    instance = forms.CharField(widget=forms.TextInput(
+                               attrs={'readonly': 'readonly'}))
+    host = forms.CharField(required=True, max_length="30", label=_("To Host"))
+
+    def handle(self, request, data):
+        try:
+            api.server_live_migrate(request, data['instance'], data['host'])  #
+            messages.success(request,
+                             _('Instance migrated to host "%s".') % data['host'])
+        except:
+            exceptions.handle(request, _('Unable to live migrate.'))
+
+        return shortcuts.redirect(
+                        'horizon:syspanel:instances:index')
+        
