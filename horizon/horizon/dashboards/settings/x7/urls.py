@@ -18,6 +18,6 @@ from django.conf.urls.defaults import patterns, url
 
 from .views import IndexView
 
-urlpatterns = patterns('horizon.dashboards.settings.ec2.views',
+urlpatterns = patterns('horizon.dashboards.settings.x7.views',
     url(r'^$', IndexView.as_view(), name='index'),
 )
