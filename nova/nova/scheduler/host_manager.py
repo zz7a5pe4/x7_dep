@@ -125,6 +125,7 @@ class HostState(object):
         if FLAGS.reserved_host_memory_mb > 0:
             all_ram_mb -= FLAGS.reserved_host_memory_mb
         self.free_ram_mb = all_ram_mb
+        self.total_usable_ram_mb = all_ram_mb
         self.free_disk_mb = all_disk_mb
         self.vcpus_total = vcpus_total
 
