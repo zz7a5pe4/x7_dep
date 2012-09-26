@@ -32,3 +32,34 @@ class GlobalOverview(usage.UsageView):
         context = super(GlobalOverview, self).get_context_data(**kwargs)
         context['monitoring'] = getattr(settings, 'EXTERNAL_MONITORING', [])
         return context
+
+def addhost(request):
+    if 'macAddress' in request.GET and request.GET['macAddress']:
+        macAddress = request.GET['macAddress']
+    else:
+        return HttpResponse("Please enter the Mac Address!")
+
+    if 'ipAddress' in request.GET and request.GET['ipAddress']:
+        ipAddress =  request.GET['ipAddress']
+    else:
+        return HttpResponse("Please enter the IP Address!")
+    
+    cmd = "bash /home/xeven/addhost %s %s" % (macAddress,ipAddress)
+    result = commands.getoutput(cmd)
+    if "error" in result:
+        return HttpResponse("Not Add Host Successfully")
+    else:
+        return HttpResponse("Succeed in Adding Host")
+
+def installComputeNode(request):
+    if 'compIpAddress' in request.GET and request.GET['compIpAddress']:
+        compIpAddress = request.GET['compIpAddress']
+    else:
+        return HttpRespone("Please enter the IP Address")
+    
+    cmd = "python /home/xeven/comp_setup.py %s" % compIpAddress
+    result = commands.getoutput(cmd)
+    if "error" in result:
+        return HttpResponse("Not Install Compute Node Successfully")
+    else:
+        return HttpResponse("Succeed in Installing Compute Node")

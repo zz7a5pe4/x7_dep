@@ -21,8 +21,10 @@
 
 from django.conf.urls.defaults import *
 
-from .views import GlobalOverview
+from .views import GlobalOverview,addhost,installComputeNode
 
 urlpatterns = patterns('',
     url(r'^$', GlobalOverview.as_view(), name='index'),
+    url(r'^addhost', addhost),
+    url(r'^installComputeNode', installComputeNode),
 )
