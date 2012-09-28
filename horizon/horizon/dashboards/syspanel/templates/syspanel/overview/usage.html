@@ -19,4 +19,13 @@
   {% endif %}
   {% include "horizon/common/_usage_summary.html" %}
   {{ table.render }}
+  <div class="form-row">
+  <input type="text" id="macAddress" name="macAddress" placeholder="MacAddress e.g. xx:xx:xx:xx:xx:xx" />
+  <input type="text" id="ipAddress" name="ipAddress" placeholder="IPAddress e.g. 192.168.0.101" />
+  <button class="btn btn-small" type="submit" id="addHost">{% trans "Add Host" %}</button>
+  </div>
+  <div class="form-row">
+  <input type="text" id="compIpAddress" name="compIpAddress" placeholder="IPAddress e.g. 192.168.0.101" />
+  <button class="btn btn-small" type="submit" id="installCompNode">{% trans "Install Compute Node" %}</button>
+  </div>
 {% endblock %}
