@@ -17,7 +17,7 @@
 import logging
 
 from horizon import forms
-from horizon.dashboards.settings.ec2.forms import DownloadX509Credentials
+from horizon.dashboards.settings.x7.forms import DownloadX509Credentials
 
 
 LOG = logging.getLogger(__name__)

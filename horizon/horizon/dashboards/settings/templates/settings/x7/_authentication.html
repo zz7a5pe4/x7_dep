@@ -1,0 +1,30 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+
+{% block form_id %}x7_authentication_form{% endblock %}
+{% block form_action %}{% url horizon:settings:x7:index %}{% endblock %}
+
+{% block modal_id %}x7_authentication_modal{% endblock %}
+{% block modal-header %}{% trans "Get X7 Authertication" %}{% endblock %}
+
+{% block modal-body %}
+<div class="left">
+    <fieldset>
+    	<label for="enter_authentication_number">{% trans "Enter Authentication Number" %}</label>
+        <div class="input">
+        	<input type="text" id="enter_authentication_number" name="enter_authentication_number" />
+        	<br /><br />
+        	<p>Not yet? Please go to <a href="http://www.x7cloud.com" target="_blank">x7cloud.com</a> to apply for it soon.</p>
+        </div>
+    </fieldset>
+</div>
+<div class="right">
+    <h3>{% trans "Description:" %}</h3>
+    <p>{% trans 'Please enter the authentication number to get the x7 authentication. If you not yet have the number, please go to x7cloud.com to get it.' %}</p>
+</div>
+{% endblock %}
+
+{% block modal-footer %}
+    <input class="btn btn-primary pull-right" type="submit" value="{% trans "Get X7 Authentication" %}" />
+    {% if hide %}<a href="{% url horizon:settings:x7:index %}" class="btn secondary cancel close">{% trans "Cancel" %}</a>{% endif %}
+{% endblock %}
