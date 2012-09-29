@@ -19,8 +19,9 @@
 #    under the License.
 
 from django.conf import settings
-
+from django.http import HttpResponse
 from horizon import usage
+import commands
 
 
 class GlobalOverview(usage.UsageView):
