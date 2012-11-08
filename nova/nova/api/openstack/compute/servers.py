@@ -772,6 +772,11 @@ class Controller(wsgi.Controller):
             self.compute_api.soft_delete(context, instance)
         else:
             self.compute_api.delete(context, instance)
+    
+    #x7
+    def _force_delete(self, context, id):
+        instance = self._get_server(context, id)
+        self.compute_api.force_delete(context, instance)            
 
     @wsgi.serializers(xml=ServerTemplate)
     def update(self, req, id, body):
@@ -905,11 +910,20 @@ class Controller(wsgi.Controller):
 
         return webob.Response(status_int=202)
 
+    # x7
     @wsgi.response(204)
     def delete(self, req, id):
         """ Destroys a server """
         try:
-            self._delete(req.environ['nova.context'], id)
+            #check delete or force_delete
+            #LOG.error('todo typeof:[%s]', type(req) )
+            #LOG.error('todo [req.query_string]:[%s]', req.query_string )
+            #LOG.error('todo [req.GET[force]:[%s]', req.GET['force'] )
+            if 'force' in req.GET and req.GET['force']:
+                self._force_delete(req.environ['nova.context'], id)
+            else:
+                self._delete(req.environ['nova.context'], id)
+            #self._delete(req.environ['nova.context'], id)
         except exception.NotFound:
             raise exc.HTTPNotFound()
         except exception.InstanceInvalidState as state_error:

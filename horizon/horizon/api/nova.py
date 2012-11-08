@@ -293,6 +293,10 @@ def server_create(request, name, image, flavor, key_name, user_data,
 
 def server_delete(request, instance):
     novaclient(request).servers.delete(instance)
+    
+#x7
+def server_force_delete(request, instance):
+    novaclient(request).servers.force_delete(instance)    
 
 
 def server_get(request, instance_id):

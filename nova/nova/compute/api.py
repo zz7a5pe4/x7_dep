@@ -904,8 +904,24 @@ class API(base.Base):
                             instance,
                             task_state=task_states.DELETING,
                             progress=0)
-
                 self._cast_compute_message('terminate_instance',
+                        context, instance)
+            else:
+                self.db.instance_destroy(context, instance['id'])
+        except exception.InstanceNotFound:
+            # NOTE(comstud): Race condition. Instance already gone.
+            pass
+        
+    #x7
+    def _force_delete(self, context, instance):
+        host = instance['host']
+        try:
+            if host:
+                self.update(context,
+                            instance,
+                            task_state=task_states.DELETING,
+                            progress=0)
+                self._cast_compute_message('force_terminate_instance',
                         context, instance)
             else:
                 self.db.instance_destroy(context, instance['id'])
@@ -928,6 +944,12 @@ class API(base.Base):
             return
 
         self._delete(context, instance)
+        
+    #x7
+    def force_delete(self, context, instance):
+        """Force delete a instance."""
+        self._force_delete(context, instance)
+        
 
     @wrap_check_policy
     @check_instance_state(vm_state=[vm_states.SOFT_DELETE])
@@ -947,11 +969,7 @@ class API(base.Base):
             self._cast_compute_message('power_on_instance',
                     context, instance)
 
-    @wrap_check_policy
-    @check_instance_state(vm_state=[vm_states.SOFT_DELETE])
-    def force_delete(self, context, instance):
-        """Force delete a previously deleted (but not reclaimed) instance."""
-        self._delete(context, instance)
+    
 
     @wrap_check_policy
     @check_instance_state(vm_state=[vm_states.ACTIVE, vm_states.SHUTOFF,

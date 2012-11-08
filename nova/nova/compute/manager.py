@@ -725,6 +725,43 @@ class ComputeManager(manager.SchedulerDependentManager):
 
         self.db.instance_destroy(context, instance_id)
         self._notify_about_instance_usage(instance, "delete.end")
+       
+    #x7 
+    def _force_delete_instance(self, context, instance):
+        """Force Delete an instance on this host."""
+        instance_id = instance['id']
+        self._notify_about_instance_usage(instance, "delete.start")
+            
+        try:
+            self._shutdown_instance(context, instance, 'Terminating')
+        except Exception as exc:
+            msg = _("force_delete_instance: exec _shutdown_instance catch exception, ignore and continue")
+            LOG.error(msg, context=context)
+            
+        try:
+            self._cleanup_volumes(context, instance_id)
+        except Exception as exc:
+            #todo release volumes
+            msg = _("force_delete_instance: exec _cleanup_volumes catch exception, ignore and continue")
+            LOG.error(msg, context=context)
+            
+        try:
+            self._instance_update(context,
+                              instance_id,
+                              vm_state=vm_states.DELETED,
+                              task_state=None,
+                              terminated_at=utils.utcnow())
+        except Exception as exc:
+            msg = _("force_delete_instance: exec _instance_update catch exception, ignore and continue")
+            LOG.error(msg, context=context)
+        
+        try:
+            self.db.instance_destroy(context, instance_id)
+        except Exception as exc:
+            msg = _("force_delete_instance: exec instance_destroy catch exception, ignore and continue")
+            LOG.error(msg, context=context)
+            
+        self._notify_about_instance_usage(instance, "delete.end")
 
     @exception.wrap_exception(notifier=notifier, publisher_id=publisher_id())
     @checks_instance_lock
@@ -745,6 +782,28 @@ class ComputeManager(manager.SchedulerDependentManager):
             except exception.InstanceNotFound as e:
                 LOG.warn(e)
         do_terminate_instance()
+        
+    #@exception.wrap_exception(notifier=notifier, publisher_id=publisher_id())
+    #@checks_instance_lock
+    #@wrap_instance_fault
+    #x7    
+    def force_terminate_instance(self, context, instance_uuid):
+        """Force Terminate an instance on this host."""
+        @utils.synchronized(instance_uuid)
+        def do_force_terminate_instance():
+            elevated = context.elevated()
+            instance = self.db.instance_get_by_uuid(elevated, instance_uuid)
+            compute_utils.notify_usage_exists(instance, current_period=True)
+            try:
+                self._force_delete_instance(context, instance)
+            except exception.InstanceTerminationFailure as error:
+                msg = _('%s. Setting instance vm_state to ERROR')
+                LOG.error(msg % error)
+                self._set_instance_error_state(context, instance_uuid)
+            except exception.InstanceNotFound as e:
+                LOG.warn(e)
+        do_force_terminate_instance()
+        
 
     @exception.wrap_exception(notifier=notifier, publisher_id=publisher_id())
     @checks_instance_lock

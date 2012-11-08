@@ -39,6 +39,13 @@ class Server(base.Resource):
         Delete (i.e. shut down and delete the image) this server.
         """
         self.manager.delete(self)
+    
+    # x7
+    def force_delete(self):
+        """
+        Force Delete (i.e. shut down and delete the image) this server.
+        """
+        self.manager.force_delete(self)
 
     def update(self, name=None):
         """
@@ -484,6 +491,14 @@ class ServerManager(local_base.BootingManagerWithFind):
         Delete (i.e. shut down and delete the image) this server.
         """
         self._delete("/servers/%s" % base.getid(server))
+        
+    # x7  krait 20121103
+    def force_delete(self, server):
+        """
+        Force Delete (i.e. shut down and delete the image) this server.
+        """
+        #add force flag. krait
+        self._delete("/servers/%s?force=true" % base.getid(server))
 
     def reboot(self, server, type=REBOOT_SOFT):
         """

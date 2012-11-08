@@ -177,6 +177,18 @@ class LiveMigration(tables.LinkAction):
     def allowed(self, request, instance=None):
         return instance.status in ACTIVE_STATES
 
+#x7  krait 20121103    
+class ForceTerminate(tables.BatchAction):
+    name = "force_terminate"
+    action_present = _("ForceTerminate")
+    action_past = _("ForceTerminated")
+    data_type_singular = _("Instance")
+    data_type_plural = _("Instances")
+    classes = ('btn-danger', 'btn-terminate')
+    
+    def action(self, request, obj_id):
+        api.server_force_delete(request, obj_id)
+
 class ConsoleLink(tables.LinkAction):
     name = "console"
     verbose_name = _("VNC Console")
@@ -278,5 +290,6 @@ class InstancesTable(tables.DataTable):
         table_actions = (LaunchLink, TerminateInstance)
         row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
                        TogglePause, ToggleSuspend, RebootInstance,
-                       MigrateInstance,  LiveMigration,                      # chunlai
-                       TerminateInstance)
+                       MigrateInstance,  LiveMigration,                    # chunlai
+                       TerminateInstance,                                  # x7
+                       ForceTerminate )
