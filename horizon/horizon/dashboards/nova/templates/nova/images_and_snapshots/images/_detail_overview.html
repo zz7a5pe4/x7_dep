@@ -40,6 +40,10 @@
   <h4>{% trans "Custom Properties" %}</h4>
   <hr class="header_rule">
   <dl>
+    {% if image.properties.x7ext %}
+      <dt>{% trans "x7ext" %}</dt>
+      <dd>{{ image.properties.x7ext }}</dd>
+    {% endif %}
     {% if image.properties.architecture %}
       <dt>{% trans "Architecture" %}</dt>
       <dd>{{ image.properties.architecture }}</dd>
