@@ -1392,6 +1392,13 @@ class LibvirtConnection(driver.ComputeDriver):
         inst_type_id = instance['instance_type_id']
         inst_type = instance_types.get_instance_type(inst_type_id)
 
+        imgprop = image_meta.get('properties', None)
+        if imgprop :
+            x7ext = imgprop.get('x7ext', 'No')
+        else:
+            x7ext = 'No'
+        
+        LOG.debug(_("instance property %s"),x7ext)
         if FLAGS.use_cow_images:
             driver_type = 'qcow2'
         else:
@@ -1448,7 +1455,8 @@ class LibvirtConnection(driver.ComputeDriver):
                     'volumes': volumes,
                     'use_virtio_for_bridges':
                             FLAGS.libvirt_use_virtio_for_bridges,
-                    'ephemerals': ephemerals}
+                    'ephemerals': ephemerals,
+                    'x7ext': x7ext}
 
         root_device_name = driver.block_device_info_get_root(block_device_info)
         if root_device_name:
@@ -1506,7 +1514,7 @@ class LibvirtConnection(driver.ComputeDriver):
         xml_info = self._prepare_xml_info(instance, network_info, image_meta,
                                           rescue, block_device_info)
         xml = str(Template(self.libvirt_xml, searchList=[xml_info]))
-        LOG.debug(_('Finished toXML method'), instance=instance)
+        LOG.debug(_('Finished toXML method %s'), xml)
         return xml
 
     def _lookup_by_name(self, instance_name):

@@ -51,6 +51,11 @@
     #end if
 #end if
     </os>
+#if $x7ext == 'yes'    
+    <cpu match='exact'>
+        <model>core2duo</model>
+    </cpu>
+#end if 
 #if $type != 'lxc' and $type != 'uml'
     <features>
         <acpi/>
