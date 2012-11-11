@@ -919,7 +919,7 @@ class Controller(wsgi.Controller):
             #LOG.error('todo typeof:[%s]', type(req) )
             #LOG.error('todo [req.query_string]:[%s]', req.query_string )
             #LOG.error('todo [req.GET[force]:[%s]', req.GET['force'] )
-            if 'force' in req.GET and req.GET['force']:
+            if 'force' in req.GET and req.GET['force'] == 'true':
                 self._force_delete(req.environ['nova.context'], id)
             else:
                 self._delete(req.environ['nova.context'], id)
