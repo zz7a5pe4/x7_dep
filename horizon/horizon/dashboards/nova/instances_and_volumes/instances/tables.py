@@ -76,6 +76,18 @@ class RebootInstance(tables.BatchAction):
     def action(self, request, obj_id):
         api.server_reboot(request, obj_id)
 
+#x7.ryan 20121113
+class RebootInstanceTable(tables.BatchAction):
+    name = "reboot"
+    action_present = _("Reboot")
+    action_past = _("Rebooted")
+    data_type_singular = _("Instance")
+    data_type_plural = _("Instances")
+    classes = ('btn-danger', 'btn-reboot')
+    
+    def action(self, request, obj_id):
+        api.server_reboot(request, obj_id)
+
 # chunlai
 class MigrateInstance(tables.BatchAction):
     name = "migrate"
@@ -143,6 +155,22 @@ class ToggleSuspend(tables.BatchAction):
             api.server_suspend(request, obj_id)
             self.current_past_action = SUSPEND
 
+#x7.ryan 20121113
+class ToggleSuspendTable(tables.BatchAction):
+    name = "suspend"
+    action_present = (_("Suspend"), _("Resume"))
+    action_past = (_("Suspended"), _("Resumed"))
+    data_type_singular = _("Instance")
+    data_type_plural = _("Instances")
+    classes = ("btn-suspend")
+    
+    def action(self, request, obj_id):
+        if self.suspended:
+            api.server_resume(request, obj_id)
+            self.current_past_action = RESUME
+        else:
+            api.server_suspend(request, obj_id)
+            self.current_past_action = SUSPEND
 
 class LaunchLink(tables.LinkAction):
     name = "launch"
@@ -287,9 +315,7 @@ class InstancesTable(tables.DataTable):
         verbose_name = _("Instances")
         status_columns = ["status", "task"]
         row_class = UpdateRow
-        table_actions = (LaunchLink, TerminateInstance)
+        table_actions = (LaunchLink, TerminateInstance, RebootInstanceTable, ToggleSuspendTable)
         row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
-                       TogglePause, ToggleSuspend, RebootInstance,
-                       MigrateInstance,  LiveMigration,                    # chunlai
-                       TerminateInstance,                                  # x7
-                       ForceTerminate )
+                       TogglePause, ToggleSuspend, MigrateInstance, LiveMigration,  #x7.chunlai
+                       RebootInstance, TerminateInstance, ForceTerminate )          #x7.krait

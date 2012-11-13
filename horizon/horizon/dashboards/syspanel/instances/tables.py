@@ -25,7 +25,7 @@ from horizon import tables
 from horizon.dashboards.nova.instances_and_volumes.instances.tables import (
         TerminateInstance, EditInstance, ConsoleLink, LogLink, SnapshotLink,
         TogglePause, ToggleSuspend, RebootInstance, get_size, UpdateRow,
-        get_ips, get_power_state,
+        get_ips, get_power_state, RebootInstanceTable, ToggleSuspendTable,
         MigrateInstance,LiveMigration)   # chunlai
 
 
@@ -85,9 +85,8 @@ class SyspanelInstancesTable(tables.DataTable):
         name = "instances"
         verbose_name = _("Instances")
         status_columns = ["status", "task"]
-        table_actions = (TerminateInstance,)
+        table_actions = (TerminateInstance, RebootInstanceTable, ToggleSuspendTable)
         row_class = AdminUpdateRow
-        row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink,
-                       LiveMigration, MigrateInstance,
-                       TogglePause, ToggleSuspend, RebootInstance,
-                       TerminateInstance)  # chunlai
+        row_actions = (EditInstance, ConsoleLink, LogLink, SnapshotLink, 
+                       TogglePause, ToggleSuspend, MigrateInstance, LiveMigration,      # chunlai
+                       RebootInstance, TerminateInstance)
