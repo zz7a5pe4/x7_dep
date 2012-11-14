@@ -497,6 +497,7 @@ class Connection(object):
                 # a protocol response.  (See paste link in LP888621)
                 # So, we check all exceptions for 'timeout' in them
                 # and try to reconnect in this case.
+                LOG.info(_(str(e)))
                 if 'timeout' not in str(e):
                     raise
             if error_callback:
